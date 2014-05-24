@@ -141,7 +141,8 @@ describe('jhipster generator', function () {
       webappDir + 'fonts/glyphicons-halflings-regular.ttf',
       webappDir + 'fonts/glyphicons-halflings-regular.woff',
       resourceDir + 'ehcache.xml',
-      testResourceDir + 'ehcache.xml'
+      testResourceDir + 'ehcache.xml',
+      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
     ];
 
     var expected = defaultFiles.concat(expectedAdditionalFiles);
@@ -184,7 +185,8 @@ describe('jhipster generator', function () {
       webappDir + 'fonts/glyphicons-halflings-regular.ttf',
       webappDir + 'fonts/glyphicons-halflings-regular.woff',
       javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
-      javaPackageDir + 'config/hazelcast/package-info.java'
+      javaPackageDir + 'config/hazelcast/package-info.java',
+      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
     ];
 
     var expected = defaultFiles.concat(expectedAdditionalFiles);

@@ -28,6 +28,8 @@ describe('jhipster generator', function () {
   var javaSrcDir = 'src/main/java/';
   var javaTestDir = 'src/test/java/';
   var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
+  var javaTestPackageDir = javaTestDir + 'com/mycompany/myapp/';
+  var testJsDir = 'src/test/javascript/';
 
   var defaultFiles = [
       '.jshintrc',

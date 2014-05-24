@@ -3,6 +3,7 @@
 
 var path    = require('path');
 var helpers = require('yeoman-generator').test;
+var shell   = require('shelljs');
 var assert  = require("assert");
 var testDirectory = path.join(__dirname, 'temp');
 

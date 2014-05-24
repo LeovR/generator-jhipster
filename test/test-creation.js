@@ -41,7 +41,60 @@ describe('jhipster generator', function () {
       '.gitignore',
       'README.md',
       '.yo-rc.json'
-    ];
+  ];
+  var ehcacheFiles = [
+    resourceDir + 'ehcache.xml',
+    testResourceDir + 'ehcache.xml'
+  ];
+  var gruntFiles = [
+    'Gruntfile.js'
+  ];
+  var gulpFiles = [
+    'gulpfile.js'
+  ];
+  var sqlFiles = [
+    resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+    resourceDir + 'config/liquibase/master.xml',
+    resourceDir + 'config/liquibase/users.csv',
+    resourceDir + 'config/liquibase/authorities.csv',
+    resourceDir + 'config/liquibase/users_authorities.csv'
+  ];
+  var nosqlFiles = [
+    resourceDir + 'config/mongeez/master.xml',
+    resourceDir + 'config/mongeez/users.xml',
+    resourceDir + 'config/mongeez/authorities.xml',
+    javaTestPackageDir + 'config/MongoConfiguration.java'
+  ];
+  var tokenFiles = [
+    javaPackageDir + 'config/OAuth2ServerConfiguration.java'
+  ];
+  var hazelcastFiles = [
+    javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
+    javaPackageDir + 'config/hazelcast/package-info.java'
+  ];
+  var atmosphereFiles = [
+    javaPackageDir + 'web/websocket/package-info.java',
+    javaPackageDir + 'web/websocket/ActivityService.java',
+    javaPackageDir + 'web/websocket/TrackerService.java',
+    javaPackageDir + 'web/websocket/dto/package-info.java',
+    javaPackageDir + 'web/websocket/dto/ActivityDTO.java',
+    javaPackageDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java',
+    webappDir + 'views/tracker.html',
+    testJsDir + 'mock/atmosphere.mock.js'
+  ];
+  var cssFiles = [
+    webappDir + 'images/glyphicons-halflings.png',
+    webappDir + 'images/glyphicons-halflings-white.png',
+    webappDir + 'styles/bootstrap.css',
+    webappDir + 'styles/main.css',
+    webappDir + 'fonts/glyphicons-halflings-regular.eot',
+    webappDir + 'fonts/glyphicons-halflings-regular.svg',
+    webappDir + 'fonts/glyphicons-halflings-regular.ttf',
+    webappDir + 'fonts/glyphicons-halflings-regular.woff'
+  ];
+  var compassFiles = [
+    'src/main/scss/main.scss'
+  ];
 
   it('creates expected files', function (done) {
 

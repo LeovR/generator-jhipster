@@ -7,31 +7,16 @@ var shell   = require('shelljs');
 var assert  = require("assert");
 var testDirectory = path.join(__dirname, 'temp');
 
+var resourceDir = 'src/main/resources/';
+var testResourceDir = 'src/test/resources/';
+var webappDir = 'src/main/webapp/';
+var javaSrcDir = 'src/main/java/';
+var javaTestDir = 'src/test/java/';
+var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
+var javaTestPackageDir = javaTestDir + 'com/mycompany/myapp/';
+var testJsDir = 'src/test/javascript/';
 
-describe('jhipster generator', function () {
-  beforeEach(function (done) {
-    helpers.testDirectory(testDirectory, function (err) {
-      if (err) {
-        return done(err);
-      }
-
-      this.app = helpers.createGenerator('jhipster:app', [
-        '../../app'
-      ]);
-      done();
-    }.bind(this));
-  });
-
-  var resourceDir = 'src/main/resources/';
-  var testResourceDir = 'src/test/resources/';
-  var webappDir = 'src/main/webapp/';
-  var javaSrcDir = 'src/main/java/';
-  var javaTestDir = 'src/test/java/';
-  var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
-  var javaTestPackageDir = javaTestDir + 'com/mycompany/myapp/';
-  var testJsDir = 'src/test/javascript/';
-
-  var defaultFiles = [
+var defaultFiles = [
       '.jshintrc',
       '.editorconfig',
       'bower.json',
@@ -41,38 +26,41 @@ describe('jhipster generator', function () {
       '.gitignore',
       'README.md',
       '.yo-rc.json'
-  ];
-  var ehcacheFiles = [
+];
+
+var files = new Array();
+
+files['ehcache'] = [
     resourceDir + 'ehcache.xml',
     testResourceDir + 'ehcache.xml'
-  ];
-  var gruntFiles = [
+];
+files['grunt'] = [
     'Gruntfile.js'
-  ];
-  var gulpFiles = [
+];
+files['gulp'] = [
     'gulpfile.js'
-  ];
-  var sqlFiles = [
+];
+files['sql'] = [
     resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
     resourceDir + 'config/liquibase/master.xml',
     resourceDir + 'config/liquibase/users.csv',
     resourceDir + 'config/liquibase/authorities.csv',
     resourceDir + 'config/liquibase/users_authorities.csv'
-  ];
-  var nosqlFiles = [
+];
+files['nosql'] = [
     resourceDir + 'config/mongeez/master.xml',
     resourceDir + 'config/mongeez/users.xml',
     resourceDir + 'config/mongeez/authorities.xml',
     javaTestPackageDir + 'config/MongoConfiguration.java'
-  ];
-  var tokenFiles = [
+];
+files['token'] = [
     javaPackageDir + 'config/OAuth2ServerConfiguration.java'
-  ];
-  var hazelcastFiles = [
+];
+files['hazelcast'] = [
     javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
     javaPackageDir + 'config/hazelcast/package-info.java'
-  ];
-  var atmosphereFiles = [
+];
+files['atmosphere'] = [
     javaPackageDir + 'web/websocket/package-info.java',
     javaPackageDir + 'web/websocket/ActivityService.java',
     javaPackageDir + 'web/websocket/TrackerService.java',
@@ -81,8 +69,8 @@ describe('jhipster generator', function () {
     javaPackageDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java',
     webappDir + 'views/tracker.html',
     testJsDir + 'mock/atmosphere.mock.js'
-  ];
-  var cssFiles = [
+];
+files['css'] = [
     webappDir + 'images/glyphicons-halflings.png',
     webappDir + 'images/glyphicons-halflings-white.png',
     webappDir + 'styles/bootstrap.css',
@@ -91,185 +79,123 @@ describe('jhipster generator', function () {
     webappDir + 'fonts/glyphicons-halflings-regular.svg',
     webappDir + 'fonts/glyphicons-halflings-regular.ttf',
     webappDir + 'fonts/glyphicons-halflings-regular.woff'
-  ];
-  var compassFiles = [
+];
+files['compass'] = [
     'src/main/scss/main.scss'
-  ];
+];
 
-  it('creates expected files', function (done) {
+var configuration = new Array();
+configuration['buildTool'] = {values:['maven'],rebuild:true}
+configuration['javaVersion'] = {values:['7','8'],rebuild:true};
+configuration['authenticationType'] = {values:['cookie','token'],rebuild:true};
+configuration['hibernateCache'] = {values:['no','hazelcast','ehcache'],rebuild:true};
+configuration['clusteredHttpSession'] = {values:['no','hazelcast'],rebuild:true};
+configuration['websocket'] = {values:['no','atmosphere'],rebuild:true};
+configuration['databaseType'] = {values:['sql','nosql'],rebuild:true};
+configuration['devDatabaseType'] = {values:['h2Memory','mysql','postgresql','mongodb'],rebuild:false};
+configuration['prodDatabaseType'] = {values:['mysql','postgresql','mongodb'],rebuild:false};
+configuration['baseName'] = {values:['jhipster'],rebuild:false};
+configuration['packageName'] = {values:['com.mycompany.myapp'],rebuild:false};
+configuration['frontendBuilder'] = {values:['grunt'],rebuild:false};
+configuration['useCompass'] = {values:[true,false],rebuild:false};
 
-    var expectedAdditionalFiles = [
-      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
-      resourceDir + 'config/liquibase/master.xml',
-      resourceDir + 'config/liquibase/users.csv',
-      resourceDir + 'config/liquibase/authorities.csv',
-      resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png', 
-      webappDir + 'images/glyphicons-halflings-white.png', 
-      webappDir + 'styles/bootstrap.css', 
-      webappDir + 'styles/main.css', 
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff'
-    ];
+var key;
+var keys = [];
+for(key in configuration) {
+    keys.push(key);
+}
 
-    var expected = defaultFiles.concat(expectedAdditionalFiles);
+var buildKeys = [];
+for(var i = 0; i < keys.length; i++) {
+    key = keys[i];
+    if(configuration[key].rebuild === true) {
+        buildKeys.push(key);
+    }
+}
 
-    helpers.mockPrompt(this.app, {
-      'baseName': 'jhipster',
-      'packageName': 'com.mycompany.myapp',
-      'javaVersion': '7',
-      'authenticationType': 'cookie',
-      'databaseType': 'sql',
-      'hibernateCache': 'no',
-      'clusteredHttpSession': 'no',
-      'websocket': 'no',
-      'prodDatabaseType': 'mysql',
-      'devDatabaseType': 'h2Memory',
-      'frontendBuilder': 'grunt',
-      'useCompass': false
-    });
-    this.app.options['skip-install'] = true;
-    this.app.run({}, function () {
-      helpers.assertFiles(expected);
-      done();
-    });
-  });
+var buildConfigurations = new Array();
 
-  it('creates expected files with authenticationType "token"', function (done) {
+describe('jhipster generator', function () {
 
-    var expectedAdditionalFiles = [
-      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
-      resourceDir + 'config/liquibase/master.xml',
-      resourceDir + 'config/liquibase/users.csv',
-      resourceDir + 'config/liquibase/authorities.csv',
-      resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png', 
-      webappDir + 'images/glyphicons-halflings-white.png', 
-      webappDir + 'styles/bootstrap.css', 
-      webappDir + 'styles/main.css', 
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
-      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
-    ];
-
-    var expected = defaultFiles.concat(expectedAdditionalFiles);
-
+  beforeEach(function (done) {
+    helpers.testDirectory(testDirectory, function (err) {
+      if (err) {
+        return done(err);
+      }
 
       this.app = helpers.createGenerator('jhipster:app', [
         '../../app'
       ], null, {
-          'skip-install': true,
-          'skip-welcome-message': true,
-          'skip-message': true
+        'skip-install': true,
+        'skip-welcome-message': true,
+        'skip-message': true
       });
-    helpers.mockPrompt(this.app, {
-      'baseName': 'jhipster',
-      'packageName': 'com.mycompany.myapp',
-      'javaVersion': '7',
-      'authenticationType': 'token',
-      'databaseType': 'sql',
-      'hibernateCache': 'no',
-      'clusteredHttpSession': 'no',
-      'websocket': 'no',
-      'prodDatabaseType': 'mysql',
-      'devDatabaseType': 'h2Memory',
-      'frontendBuilder': 'grunt',
-      'useCompass': false
-    });
-    this.app.run({}, function () {
-      helpers.assertFiles(expected);
       done();
+    }.bind(this));
     });
+
+  createConfigurations(keys,{},this.app);
+
+  function createConfigurations(keysParameter, result, app) {
+      var currentKeys = keysParameter.slice();
+      if (currentKeys.length == 0) {
+
+          if (validConfiguration(result)) {
+
+              var buildConfiguration = "";
+              var execMaven = false;
+              for (var i = 0; i < buildKeys.length; i++) {
+                  buildConfiguration += buildKeys[i] + ":" + result[buildKeys[i]] + ",";
+              }
+              if (buildConfigurations.indexOf(buildConfiguration) === -1) {
+                  buildConfigurations.push(buildConfiguration);
+                  execMaven = true;
+              }
+
+              var expectedFiles = defaultFiles;
+              var key;
+              for (var i = 0; i < keys.length; i++) {
+                  key = keys[i];
+                  if (files[result[key]] !== undefined) {
+                      expectedFiles = expectedFiles.concat(files[result[key]]);
+                  }
+              }
+
+              it('creates expected files and package with maven if necessary', function (done) {
+                  helpers.mockPrompt(this.app, result);
+                    this.app.run({}, function () {
+                      if (execMaven) {
+                        var result = shell.exec("mvn package -f " + testDirectory + "/pom.xml");
+                        var result = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
+                        if(result.code !== 0) {
+                            console.log(result.output);
+                        }
+                        assert.equal(0, result.code, "Maven should return with exit code 0");
+                      }
+                      helpers.assertFiles(expectedFiles);
+          done();
+      });
   });
 
-  it('creates expected files with hibernateCache "ehcache"', function (done) {
+          }
+      }
+      var key;
+      for (var i = 0; i < currentKeys.length; i++) {
+          key = currentKeys[i];
+          currentKeys.splice(i, 1);
+          for (var j = 0; j < configuration[key].values.length; j++) {
 
-    var expectedAdditionalFiles = [
-      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
-      resourceDir + 'config/liquibase/master.xml',
-      resourceDir + 'config/liquibase/users.csv',
-      resourceDir + 'config/liquibase/authorities.csv',
-      resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
-      resourceDir + 'ehcache.xml',
-      testResourceDir + 'ehcache.xml',
-      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
-    ];
+              result[key] = configuration[key].values[j];
+              createConfigurations(currentKeys, result, app);
+          }
+          break;
+      }
 
-    var expected = defaultFiles.concat(expectedAdditionalFiles);
+  }
 
-    helpers.mockPrompt(this.app, {
-      'baseName': 'jhipster',
-      'packageName': 'com.mycompany.myapp',
-      'javaVersion': '7',
-      'authenticationType': 'token',
-      'databaseType': 'sql',
-      'hibernateCache': 'ehcache',
-      'clusteredHttpSession': 'no',
-      'websocket': 'no',
-      'prodDatabaseType': 'mysql',
-      'devDatabaseType': 'h2Memory',
-      'frontendBuilder': 'grunt',
-      'useCompass': false
-    });
-    this.app.run({}, function () {
-      helpers.assertFiles(expected);
-      done();
-    });
-  });
+  function validConfiguration(configuration) {
+      return (configuration.databaseType !== 'sql' || (configuration.prodDatabaseType !== 'mongodb' && configuration.devDatabaseType !== 'mongodb') ) &&
+          ( configuration.databaseType !== 'nosql' || (configuration.prodDatabaseType === 'mongodb' && configuration.devDatabaseType === 'mongodb'));
+  }
 
-  it('creates expected files with hibernateCache "hazelcast"', function (done) {
-
-    var expectedAdditionalFiles = [
-      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
-      resourceDir + 'config/liquibase/master.xml',
-      resourceDir + 'config/liquibase/users.csv',
-      resourceDir + 'config/liquibase/authorities.csv',
-      resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
-      javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
-      javaPackageDir + 'config/hazelcast/package-info.java',
-      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
-    ];
-
-    var expected = defaultFiles.concat(expectedAdditionalFiles);
-
-    helpers.mockPrompt(this.app, {
-      'baseName': 'jhipster',
-      'packageName': 'com.mycompany.myapp',
-      'javaVersion': '7',
-      'authenticationType': 'token',
-      'databaseType': 'sql',
-      'hibernateCache': 'hazelcast',
-      'clusteredHttpSession': 'no',
-      'websocket': 'no',
-      'prodDatabaseType': 'mysql',
-      'devDatabaseType': 'h2Memory',
-      'frontendBuilder': 'grunt',
-      'useCompass': false
-    });
-    this.app.options['skip-install'] = true;
-    this.app.run({}, function () {
-      helpers.assertFiles(expected);
-      done();
-    });
-  });
 });

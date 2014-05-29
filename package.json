@@ -25,7 +25,7 @@
     "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter dot"
   },
   "dependencies": {
     "yeoman-generator": "0.17.0",

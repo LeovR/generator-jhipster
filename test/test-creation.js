@@ -158,6 +158,14 @@ describe('jhipster generator', function () {
 
     var expected = defaultFiles.concat(expectedAdditionalFiles);
 
+
+      this.app = helpers.createGenerator('jhipster:app', [
+        '../../app'
+      ], null, {
+          'skip-install': true,
+          'skip-welcome-message': true,
+          'skip-message': true
+      });
     helpers.mockPrompt(this.app, {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
@@ -172,7 +180,6 @@ describe('jhipster generator', function () {
       'frontendBuilder': 'grunt',
       'useCompass': false
     });
-    this.app.options['skip-install'] = true;
     this.app.run({}, function () {
       helpers.assertFiles(expected);
       done();
@@ -216,7 +223,6 @@ describe('jhipster generator', function () {
       'frontendBuilder': 'grunt',
       'useCompass': false
     });
-    this.app.options['skip-install'] = true;
     this.app.run({}, function () {
       helpers.assertFiles(expected);
       done();

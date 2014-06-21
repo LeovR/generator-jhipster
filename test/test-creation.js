@@ -22,6 +22,13 @@ describe('jhipster generator', function () {
     }.bind(this));
   });
 
+  var resourceDir = 'src/main/resources/';
+  var testResourceDir = 'src/test/resources/';
+  var webappDir = 'src/main/webapp/';
+  var javaSrcDir = 'src/main/java/';
+  var javaTestDir = 'src/test/java/';
+  var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
+
   var defaultFiles = [
       '.jshintrc',
       '.editorconfig',
@@ -33,13 +40,6 @@ describe('jhipster generator', function () {
       'README.md',
       '.yo-rc.json'
     ];
-
-  var resourceDir = 'src/main/resources/';
-  var testResourceDir = 'src/test/resources/';
-  var webappDir = 'src/main/webapp/';
-  var javaSrcDir = 'src/main/java/';
-  var javaTestDir = 'src/test/java/';
-  var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
 
   it('creates expected files', function (done) {
 

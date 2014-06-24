@@ -165,11 +165,11 @@ describe('jhipster configurations', function () {
                   helpers.mockPrompt(this.app, result);
                     this.app.run({}, function () {
                       if (execMaven) {
-                        var result = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
-                        if(result.code !== 0) {
-                            console.log(result.output);
+                        var execResult = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
+                        if(execResult.code !== 0) {
+                            console.log(execResult.output);
                         }
-                        assert.equal(0, result.code, "Maven should return with exit code 0");
+                        assert.equal(0, execResult.code, "Maven should return with exit code 0");
                       }
                       helpers.assertFiles(expectedFiles);
           done();

@@ -115,7 +115,7 @@ for(var i = 0; i < keys.length; i++) {
 
 var buildConfigurations = new Array();
 
-describe('jhipster generator', function () {
+describe('jhipster configurations', function () {
 
   beforeEach(function (done) {
     helpers.testDirectory(testDirectory, function (err) {

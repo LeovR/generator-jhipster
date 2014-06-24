@@ -165,7 +165,6 @@ describe('jhipster configurations', function () {
                   helpers.mockPrompt(this.app, result);
                     this.app.run({}, function () {
                       if (execMaven) {
-                        var result = shell.exec("mvn package -f " + testDirectory + "/pom.xml");
                         var result = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
                         if(result.code !== 0) {
                             console.log(result.output);

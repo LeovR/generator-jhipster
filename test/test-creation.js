@@ -161,8 +161,10 @@ describe('jhipster configurations', function () {
                   }
               }
 
-              it('creates expected files and package with maven if necessary', function (done) {
-                  helpers.mockPrompt(this.app, result);
+              it('creates expected files and compile ' + JSON.stringify(result), function (done) {
+                var assertFiles = expectedFiles.slice(0);
+                var config = result;
+                  helpers.mockPrompt(this.app, config);
                     this.app.run({}, function () {
                       if (execMaven) {
                         var execResult = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
@@ -171,10 +173,10 @@ describe('jhipster configurations', function () {
                         }
                         assert.equal(0, execResult.code, "Maven should return with exit code 0");
                       }
-                      helpers.assertFiles(expectedFiles);
-          done();
-      });
-  });
+                      helpers.assertFiles(assertFiles);
+                      done();
+                    });
+              });
 
           }
       }

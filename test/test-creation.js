@@ -152,7 +152,7 @@ describe('jhipster configurations', function () {
                   execMaven = true;
               }
 
-              var expectedFiles = defaultFiles;
+              var expectedFiles = defaultFiles.slice(0);
               var key;
               for (var i = 0; i < keys.length; i++) {
                   key = keys[i];

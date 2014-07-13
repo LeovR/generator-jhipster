@@ -134,7 +134,31 @@ describe('jhipster configurations', function () {
     }.bind(this));
     });
 
+  var configurations = new Array();
+
   createConfigurations(keys,{},this.app);
+
+  for (var i = 0; i < configurations.length; i++) {
+      var testConfiguration = configurations[i];
+
+      it('creates expected files and compile ' + JSON.stringify(testConfiguration), function (done) {
+
+                  helpers.mockPrompt(this.app, testConfiguration.configuration);
+                    this.app.run({}, function () {
+                      if (testConfiguration.execMaven) {
+                        var execResult = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: false});
+                        if(execResult.code !== 0) {
+                            console.log(execResult.output);
+                        }
+                        assert.equal(0, execResult.code, "Maven should return with exit code 0");
+                      }
+                      helpers.assertFiles(testConfiguration.files);
+                      done();
+                    });
+              });
+  };
+
+
 
   function createConfigurations(keysParameter, result, app) {
       var currentKeys = keysParameter.slice();
@@ -161,23 +185,7 @@ describe('jhipster configurations', function () {
                   }
               }
 
-              it('creates expected files and compile ' + JSON.stringify(result), function (done) {
-                var assertFiles = expectedFiles.slice(0);
-                var config = result;
-                  helpers.mockPrompt(this.app, config);
-                    this.app.run({}, function () {
-                      if (execMaven) {
-                        var execResult = shell.exec("mvn package -f " + testDirectory + "/pom.xml", {silent: true});
-                        if(execResult.code !== 0) {
-                            console.log(execResult.output);
-                        }
-                        assert.equal(0, execResult.code, "Maven should return with exit code 0");
-                      }
-                      helpers.assertFiles(assertFiles);
-                      done();
-                    });
-              });
-
+              configurations.push({files: expectedFiles,execMaven: execMaven,configuration: result});
           }
       }
       var key;
